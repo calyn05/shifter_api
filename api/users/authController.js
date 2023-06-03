@@ -20,7 +20,7 @@ exports.signup = function (req, res) {
         .cookie("jwt", token, {
           expires: new Date(Date.now() + config.cookieExpireTime),
           httpOnly: true,
-          secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+          secure: true,
         })
         .status(201)
         .json({
@@ -66,8 +66,7 @@ exports.login = function (req, res) {
             .cookie("jwt", token, {
               expires: new Date(Date.now() + config.cookieExpireTime),
               httpOnly: true,
-              secure:
-                req.secure || req.headers["x-forwarded-proto"] === "https",
+              secure: true,
             })
             .status(200)
             .json({
@@ -228,7 +227,7 @@ exports.resetPassword = async function (req, res) {
     .cookie("jwt", token, {
       expires: new Date(Date.now() + config.cookieExpireTime),
       httpOnly: true,
-      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+      secure: true,
     })
     .status(200)
     .json({
@@ -256,7 +255,7 @@ exports.updatePassword = async function (req, res) {
     .cookie("jwt", token, {
       expires: new Date(Date.now() + config.cookieExpireTime),
       httpOnly: true,
-      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+      secure: true,
     })
     .status(200)
     .json({
