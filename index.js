@@ -13,7 +13,12 @@ const config = require("./config");
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:4200",
+    credentials: true,
+  })
+);
 app.use("/api/user", userRouter);
 app.use("/api/shifts", shiftRouter);
 app.use("/api/permissions", permissionRouter);
