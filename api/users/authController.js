@@ -16,11 +16,17 @@ exports.signup = function (req, res) {
     .save()
     .then((user) => {
       let token = signToken(user._id);
-      res.status(201).json({
-        status: "success",
-        token: token,
-        data: user,
-      });
+      res
+        .cookie("jwt", token, {
+          expires: new Date(Date.now() + config.cookieExpireTime),
+          httpOnly: true,
+          secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+        })
+        .status(201)
+        .json({
+          status: "success",
+          data: user,
+        });
     })
     .catch((err) => {
       res.status(400).json({
@@ -55,11 +61,19 @@ exports.login = function (req, res) {
           });
         } else {
           let token = signToken(user._id);
-          res.status(200).json({
-            status: "success",
-            token: token,
-            data: user,
-          });
+
+          res
+            .cookie("jwt", token, {
+              expires: new Date(Date.now() + config.cookieExpireTime),
+              httpOnly: true,
+              secure:
+                req.secure || req.headers["x-forwarded-proto"] === "https",
+            })
+            .status(200)
+            .json({
+              status: "success",
+              data: user,
+            });
         }
       }
     })
@@ -72,9 +86,9 @@ exports.login = function (req, res) {
 };
 
 exports.logout = function (req, res) {
-  res.status(200).json({
+  res.clearCookie("jwt").status(200).json({
     status: "success",
-    token: null,
+    message: "Successfully logged out",
   });
 };
 
@@ -85,7 +99,7 @@ exports.protect = async function (req, res, next) {
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -210,10 +224,17 @@ exports.resetPassword = async function (req, res) {
 
   let token = signToken(user._id);
 
-  res.status(200).json({
-    status: "success",
-    token: token,
-  });
+  res
+    .cookie("jwt", token, {
+      expires: new Date(Date.now() + config.cookieExpireTime),
+      httpOnly: true,
+      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    })
+    .status(200)
+    .json({
+      status: "success",
+      message: "Password updated successfully",
+    });
 };
 
 exports.updatePassword = async function (req, res) {
@@ -231,10 +252,16 @@ exports.updatePassword = async function (req, res) {
 
   let token = signToken(user._id);
 
-  res.status(200).json({
-    status: "success",
-    token: token,
-  });
+  res
+    .cookie("jwt", token, {
+      expires: new Date(Date.now() + config.cookieExpireTime),
+      httpOnly: true,
+      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    })
+    .status(200)
+    .json({
+      status: "success",
+    });
 };
 
 exports.updateMe = async function (req, res) {

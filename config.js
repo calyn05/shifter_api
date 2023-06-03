@@ -16,6 +16,7 @@ const config = {
 
   port: process.env.PORT || 8080,
   expireTime: 24 * 60 * 10,
+  cookieExpireTime: 24 * 60 * 10 * 1000,
   dev: "development",
   test: "testing",
   prod: "production",

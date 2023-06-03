@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const userRouter = require("./api/users/userRouter");
 const shiftRouter = require("./api/shifts/shiftRouter");
@@ -11,6 +12,7 @@ const commentRouter = require("./api/comments/commentRouter");
 const config = require("./config");
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use("/api/user", userRouter);
 app.use("/api/shifts", shiftRouter);
