@@ -14,6 +14,9 @@ const config = require("./config");
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+
+app.options("*", cors());
+
 app.use("/api/user", userRouter);
 app.use("/api/shifts", shiftRouter);
 app.use("/api/permissions", permissionRouter);
